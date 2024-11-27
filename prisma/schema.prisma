@@ -12,25 +12,72 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-
-
+// write npx prisma studio to view changes
 model Profile {
-  id        String   @id @default(auto()) @map("_id")@db.ObjectId  // MongoDB uses _id by default
-  userId    String   @unique
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId // MongoDB uses _id by default
+  userId    String    @unique
   name      String
   imageUrl  String
   email     String
-  servers   Server[]  // Relating to Server model
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  servers   Server[] 
+  members   Member[] 
+  channels  Channel[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
+
 model Server {
-  id         String   @id @default(auto()) @map("_id")@db.ObjectId  // MongoDB default _id field
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId // MongoDB default _id field
   name       String
   imageUrl   String
   inviteCode String
-  profileId  String @db.ObjectId   // Stores the related Profile's ID
-  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId  String    @db.ObjectId // Stores the related Profile's ID
+  profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  members    Member[]
+  channels   Channel[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
   @@index([profileId]) // Indexing for efficient lookups
 }
 
+enum MemberRole {
+  ADMIN
+  MODERATOR
+  GUEST
+}
+
+model Member {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId // MongoDB default _id field
+  role      MemberRole @default(GUEST)
+  profileId String     @db.ObjectId // Stores the related Profile's ID
+  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  serverId  String     @db.ObjectId // Stores the related Profile's ID
+  Server    Server     @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
+}
+
+enum ChannelType {
+  TEXT
+  AUDIO
+  VIDEO
+}
+
+model Channel {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId // MongoDB default _id field
+  type      ChannelType @default(TEXT)
+  name      String
+  profileId String      @db.ObjectId // Stores the related Profile's ID
+  profile   Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  serverId  String      @db.ObjectId // Stores the related Profile's ID
+  Server    Server      @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
+}

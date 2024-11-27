@@ -1,5 +1,7 @@
 import React from 'react'
 
+// As soon as someone hits sing-up , sign-in this layout comes int to play
+
 const Authlayout = ({
     children, // will be a page or nested layout
   }: {
