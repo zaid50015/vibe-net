@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export const initialProfile= async (): Promise< Profile
 > => {
   const user = await currentUser();
-
+console.log(user?.id);
   if (!user) {
     // If user is not authenticated, redirect to sign-in page
     redirect('/sign-in"');
