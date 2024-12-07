@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import FileUpload from "@/components/ui/fileUpload";
 
 const formSchema = z.object({
   serverName: z
@@ -31,7 +32,7 @@ const formSchema = z.object({
     .max(50, {
       message: "Server Name cannot exceed 50 characters",
     }),
-  imageUrl: z.string()
+  imageUrl: z.string(),
 });
 const InitialModal = () => {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -63,7 +64,25 @@ const InitialModal = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="space-y-8 px-6">
                 <div className="flex items-center justify-center text-center">
-                  <p>TODO</p>
+                  <FormField
+                    control={form.control}
+                    name="imageUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                          Server Image
+                        </FormLabel>
+                        <FormControl>
+                          <FileUpload
+                            endpoint="serverImage"
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <FormField
                   control={form.control}
@@ -74,7 +93,6 @@ const InitialModal = () => {
                         Server name
                       </FormLabel>
                       <FormControl>
-                       
                         <Input
                           disabled={isLoading}
                           className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
