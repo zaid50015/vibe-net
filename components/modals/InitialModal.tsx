@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -44,7 +43,8 @@ const InitialModal = () => {
   });
   const isLoading = form.formState.isSubmitting;
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log("On sumbit");
+    form.reset();
   }
 
   return (
