@@ -21,9 +21,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import FileUpload from "@/components/ui/fileUpload";
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
+//TODO ADD toasts
 const formSchema = z.object({
-  serverName: z
+  name: z
     .string()
     .min(1, {
       message: "Server name is Required",
@@ -34,17 +37,23 @@ const formSchema = z.object({
   imageUrl: z.string(),
 });
 const InitialModal = () => {
+  const router=useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      serverName: "",
+      name: "",
       imageUrl: "",
     },
   });
   const isLoading = form.formState.isSubmitting;
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("On sumbit");
-    form.reset();
+  async function  onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const resp=await axios.post('/api/servers',values);
+      form.reset();
+      router.refresh();
+    } catch (error) {
+     console.log(`Unknown error occured ${error}`)
+    }
   }
 
   return (
@@ -86,7 +95,7 @@ const InitialModal = () => {
                 </div>
                 <FormField
                   control={form.control}
-                  name="serverName"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">

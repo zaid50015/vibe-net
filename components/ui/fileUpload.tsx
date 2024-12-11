@@ -4,7 +4,7 @@ import { UploadDropzone } from "@/lib/uploadthing";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { FC, useState } from "react";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+
 
 interface fileUploadProps {
   onChange: (url?: string) => void;
@@ -31,17 +31,7 @@ const FileUpload: FC<fileUploadProps> = ({ onChange, endpoint, value }) => {
         setFileInfo(null);
         
       } else {
-        toast.error(`Unknown error ocuured while deleting`, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+       
       }
     }
   };
@@ -74,20 +64,9 @@ const FileUpload: FC<fileUploadProps> = ({ onChange, endpoint, value }) => {
         }}
         onUploadError={(error: Error) => {
           console.log(error);
-          toast.error(`${error.message}`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          });
         }}
       />
-      <ToastContainer />
+    
     </>
   );
 };
