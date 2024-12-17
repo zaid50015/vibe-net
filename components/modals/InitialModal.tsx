@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import FileUpload from "@/components/ui/fileUpload";
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import { useToast } from "@/hooks/use-toast";
 
 //TODO ADD toasts
 const formSchema = z.object({
@@ -38,6 +39,7 @@ const formSchema = z.object({
 });
 const InitialModal = () => {
   const router=useRouter()
+  const {toast}=useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,6 +55,11 @@ const InitialModal = () => {
       router.refresh();
     } catch (error) {
      console.log(`Unknown error occured ${error}`)
+     toast({
+      title: "Uh oh! Something went wrong.",
+      description: `${error}`,
+      variant: "destructive", // Optional, depending on your toast configuration
+    })
     }
   }
 

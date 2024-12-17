@@ -31,7 +31,7 @@ const FileUpload: FC<fileUploadProps> = ({ onChange, endpoint, value }) => {
         setFileInfo(null);
         
       } else {
-       
+          console.log("Error occured while deleting image")
       }
     }
   };
