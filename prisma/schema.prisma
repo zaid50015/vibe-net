@@ -71,7 +71,7 @@ model Channel {
   name      String
   profileId String      @db.ObjectId // Stores the related Profile's ID
   profile   Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  serverId  String      @db.ObjectId // Stores the related Profile's ID
+  serverId  String      @db.ObjectId // Stores the related Servers's ID
   Server    Server      @relation(fields: [serverId], references: [id], onDelete: Cascade)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt

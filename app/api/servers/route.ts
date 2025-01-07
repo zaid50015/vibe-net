@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   console.log("Request made");
   try {
     const { name, imageUrl } = await request.json();
-
+    console.log({name,imageUrl})
     const profile = await currentProfile();
     if (!profile) {
       return NextResponse.json({ message: "Unautharized" }, { status: 401 });
