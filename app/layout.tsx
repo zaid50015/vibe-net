@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { ModalProvider } from "@/components/providers/modal-provider";
 const font = Open_Sans({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -46,6 +47,7 @@ export default function RootLayout({
           >
             <SignedOut></SignedOut>
             <SignedIn></SignedIn>
+            <ModalProvider/>
             {children}
             <Toaster />
           </ThemeProvider>
