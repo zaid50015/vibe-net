@@ -63,7 +63,7 @@ const FileUpload: FC<fileUploadProps> = ({ onChange, endpoint, value }) => {
           });
         }}
         onUploadError={(error: Error) => {
-          console.log(error);
+          console.log("[FILE_UPLOAD]",error);
         }}
       />
     

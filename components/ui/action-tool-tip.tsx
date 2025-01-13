@@ -6,13 +6,13 @@ import {
 } from "@/components/ui/tooltip";
 import { FC } from "react";
 
-interface ActionTollTip {
+interface ActionTollTipProps {
   label: string;
   children: React.ReactNode;
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";
 }
-export const ActionTollTip: FC<ActionTollTip> = ({
+export const ActionTollTip: FC<ActionTollTipProps> = ({
   label,
   children,
   side = "right", // Default to "right"
