@@ -5,7 +5,7 @@ import db from "@/lib/db";
 import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { NavigationItems } from "@/components/navigation/navigation-item";
-import { ModeToggle } from "../toggle-theme";
+import { ModeToggle } from "../ui/toggle-theme";
 import { UserButton } from "@clerk/nextjs";
 
 const NavigationSideBar = async () => {
@@ -23,7 +23,7 @@ const NavigationSideBar = async () => {
     }
   })
   return (
-    <div className="h-full w-full flex flex-col items-center space-y-4 dark:bg-zinc-800 py-3  text-primary bg-zinc-600" >
+    <div className="h-full w-full flex flex-col items-center space-y-4 dark:bg-zinc-800 py-3  text-primary bg-slate-100" >
       <NavigationAction />
       <Separator className="h-1 w-10 dark:bg-zinc-700 bg-zinc-300 rounded-md" />
       <ScrollArea className="flex-1 w-full d">

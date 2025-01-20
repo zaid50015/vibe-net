@@ -66,7 +66,7 @@ const InitialModal = () => {
   return (
     <>
       <Dialog open>
-        <DialogContent className=" bg-white text text-black overflow-hidden">
+        <DialogContent className="bg-white text text-black overflow-hidden">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">
               Customize your server
