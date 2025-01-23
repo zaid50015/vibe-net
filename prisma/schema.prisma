@@ -28,7 +28,7 @@ model Server {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId // MongoDB default _id field
   name       String
   imageUrl   String
-  inviteCode String
+  inviteCode String @unique
   profileId  String    @db.ObjectId // Stores the related Profile's ID
   profile    Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
   members    Member[]

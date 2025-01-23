@@ -8,7 +8,7 @@ interface ModalData{
 interface UseModalInterface {
   type: ModalType | null;
   isOpen:boolean;
-  data:ModalData|null;
+  data:ModalData;
   onOpen:(type:ModalType,data?:ModalData)=>void;
   onClose: () => void;
 }

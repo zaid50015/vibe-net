@@ -9,30 +9,42 @@ import {
 import { Check, Copy, RefreshCw, Settings } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label"
 import { useRouter } from 'next/navigation'
 import { useModalStore } from "@/hooks/use-modal-store";
 import { useOrigin } from "@/hooks/use-origin";
 import { useState } from "react";
+import axios from "axios";
 
 
 const InviteModal = () => {
     const router = useRouter()
-    const [copied,setCopied]=useState(false);
-    const { isOpen, type, onClose, data } = useModalStore();
-    const server=data?.server
-    const origin=useOrigin();
-    const inviteUrl=`${origin}/invite/${server?.inviteCode}`
+    const [copied, setCopied] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { isOpen, type, onClose, data, onOpen } = useModalStore();
+    const { server } = data
+    const origin = useOrigin();
+    const inviteUrl = `${origin}/invite/${server?.inviteCode}`
     const isModalOpen = isOpen && type == "invite";
     const handleClose = (): void => {
         onClose();
     }
-    const copyInviteUrl=():void=>{
+    const copyInviteUrl = (): void => {
         navigator.clipboard.writeText(inviteUrl);
         setCopied(true);
         setTimeout(() => {
             setCopied(false);
         }, 1000);
+    }
+    const generateNewInviteUrl = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.patch(`/api/servers/${server?.id}/invite-code`);
+            onOpen("invite", { server: response.data })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -55,14 +67,17 @@ const InviteModal = () => {
                                 />
                                 <Button
                                     variant="secondary"
+                                    disabled={loading}
                                     className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
                                     onClick={copyInviteUrl}
                                 >
-                                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4"  />}
+                                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                                 </Button>
                             </div>
                             <div className="flex justify-between items-center">
                                 <Button
+                                    disabled={loading}
+                                    onClick={generateNewInviteUrl}
                                     variant="ghost"
                                     className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-gray-700"
                                 >
