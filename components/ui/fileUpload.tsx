@@ -19,7 +19,7 @@ interface file {
 const FileUpload: FC<fileUploadProps> = ({ onChange, endpoint, value }) => {
   const [fileInfo, setFileInfo] = useState<file | null>(null);
   // Deleting file because the uplaod thing upload it first
-  console.log(value);
+  console.log("Value",value);
   console.log(fileInfo);
   const handleDelete = async () => {
     if (fileInfo?.fileKey) {
@@ -31,8 +31,12 @@ const FileUpload: FC<fileUploadProps> = ({ onChange, endpoint, value }) => {
         setFileInfo(null);
         
       } else {
+        
           console.log("Error occured while deleting image")
       }
+    }
+    else{
+      onChange('');
     }
   };
 
