@@ -12,7 +12,7 @@ export async function PATCH(req: Request,
         if (!profile) {
             return NextResponse.json(
                 { error: "Unauthorized" },
-                { status: 500 }
+                { status: 400}
             );
         }
         const server = await db.server.update({

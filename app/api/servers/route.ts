@@ -4,7 +4,6 @@ import { MemberRole } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 export async function POST(request: Request) {
-  console.log("Request made");
   try {
     const { name, imageUrl } = await request.json();
     console.log({name,imageUrl})

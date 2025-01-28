@@ -39,6 +39,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## MONGODB SETUP
 Set replication set
 
+## Why prisma use
+Like the cascading property of prisma means less workaround
+
 
 
 
