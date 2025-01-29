@@ -15,6 +15,12 @@ export async function PATCH(req: Request,
                 { status: 400}
             );
         }
+        else if(!serverId){
+            return NextResponse.json(
+                { error: "Server id is not present " },
+                { status: 400}
+            );
+        }
         const server = await db.server.update({
             where: {
                 id: serverId,
@@ -38,3 +44,44 @@ export async function PATCH(req: Request,
         );
     }
 }
+//NOTE if request object missing then error
+export async function DELETE(req: Request,
+    { params }: { params: Promise<{ serverId: string }> }
+) {
+    try {
+        const serverId = (await params).serverId;
+        const profile = await currentProfile();
+        if (!profile) {
+            return NextResponse.json(
+                { error: "Unauthorized" },
+                { status: 400}
+            );
+        }
+        else if(!serverId){
+            return NextResponse.json(
+                { error: "Server id is not present " },
+                { status: 400}
+            );
+        }
+        const server = await db.server.deleteMany({
+            where: {
+                id: serverId,
+                profileId: profile.id
+            },
+        })
+        return NextResponse.json(
+            server,
+            { status: 200 }
+        );
+
+    } catch (error) {
+        console.log("[INVITE_CODE]", error);
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        );
+    }
+}
+
+
+
