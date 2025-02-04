@@ -32,6 +32,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useModalStore } from "@/hooks/use-modal-store";
 import { ChannelType } from "@prisma/client";
 import qs from 'query-string';
+import { useState } from "react";
 const formSchema = z.object({
     name: z.string()
         .min(1, { message: "Server name is required" })
@@ -42,10 +43,9 @@ const formSchema = z.object({
 });
 
 const CreateChannelModal = () => {
-    const router = useRouter();
     const params=useParams();
+    const[loading,setLoading]=useState(false);
     const { isOpen, type, onClose, data } = useModalStore();
-    const { server } = data
     const isModalOpen = isOpen && type === "createChannel";
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -59,6 +59,7 @@ const CreateChannelModal = () => {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
+            setLoading(true);
             const url = qs.stringifyUrl({
                   url: `/api/channels`,
                   query: {
@@ -69,6 +70,9 @@ const CreateChannelModal = () => {
             onClose();
         } catch (error) {
             console.error("[CREATE_CHANNEL]", error);
+        }
+        finally{
+            setLoading(false)
         }
     }
 
@@ -133,8 +137,8 @@ const CreateChannelModal = () => {
 
                         </div>
                         <DialogFooter className="px-6 py-4 w-full">
-                            <Button type="submit" variant="primary" className="w-full" >
-                                Create
+                            <Button type="submit" variant="primary" className="w-full" disabled={loading}>
+                                {loading?"Creating":"Create"}
                             </Button>
                         </DialogFooter>
                     </form>
