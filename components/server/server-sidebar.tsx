@@ -6,7 +6,7 @@ import { ServerHeader } from "@/components/server/server-header"
 import { redirect } from 'next/navigation';
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react"
 import { ServerSearchBar } from "./server-search"
-import { ScrollArea } from "@radix-ui/react-scroll-area"
+import { ScrollArea } from '../ui/scroll-area';
 import { Separator } from "@radix-ui/react-dropdown-menu"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import ServerSection from "./server-section"
@@ -114,7 +114,7 @@ export const ServerSideBar: FC<ServerSideBarProps> = async ({ serverId }) => {
 
                 {/* Text Channels Section */}
                 {!!textChannels?.length && (
-                    <Collapsible defaultOpen={true}>
+                    <Collapsible defaultOpen={true} className="mb-2">
                         <CollapsibleTrigger>
                             <ServerSection
                                 sectionType="channels"
@@ -140,7 +140,7 @@ export const ServerSideBar: FC<ServerSideBarProps> = async ({ serverId }) => {
 
                 {/* Audio Channels Section */}
                 {!!audioChannels?.length && (
-                    <Collapsible defaultOpen={true}>
+                    <Collapsible defaultOpen={true} className="mb-2">
                         <CollapsibleTrigger>
                             <ServerSection
                                 sectionType="channels"
@@ -166,7 +166,7 @@ export const ServerSideBar: FC<ServerSideBarProps> = async ({ serverId }) => {
 
                 {/* Video Channels Section */}
                 {!!videoChannels?.length && (
-                    <Collapsible defaultOpen={true}>
+                    <Collapsible defaultOpen={true} className="mb-2"> 
                         <CollapsibleTrigger>
                             <ServerSection
                                 sectionType="channels"
@@ -192,7 +192,7 @@ export const ServerSideBar: FC<ServerSideBarProps> = async ({ serverId }) => {
 
                 {/* Members Section */}
                 {!!members?.length && (
-                    <Collapsible defaultOpen={true}>
+                    <Collapsible defaultOpen={true} className="mb-2">
                         <CollapsibleTrigger>
                             <ServerSection
                                 sectionType="members"

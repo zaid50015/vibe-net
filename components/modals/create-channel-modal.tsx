@@ -32,7 +32,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useModalStore } from "@/hooks/use-modal-store";
 import { ChannelType } from "@prisma/client";
 import qs from 'query-string';
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 const formSchema = z.object({
     name: z.string()
         .min(1, { message: "Server name is required" })
@@ -43,35 +43,46 @@ const formSchema = z.object({
 });
 
 const CreateChannelModal = () => {
-    const params=useParams();
-    const[loading,setLoading]=useState(false);
+    const params = useParams();
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const { isOpen, type, onClose, data } = useModalStore();
     const isModalOpen = isOpen && type === "createChannel";
-
+    const {channelType}=data
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            type: ChannelType.TEXT
+            type: ChannelType.TEXT,
         },
     });
-
+  useEffect(() => {
+   if(channelType){
+        form.setValue('type',channelType)
+   }
+   else{
+        form.setValue('type',ChannelType.TEXT)
+   }
+  }, [channelType])
+  
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setLoading(true);
             const url = qs.stringifyUrl({
-                  url: `/api/channels`,
-                  query: {
+                url: `/api/channels`,
+                query: {
                     serverId: params?.serverId,
-                  },
-                });
-                const resp=await axios.post(url,values);
+                },
+            });
+            const resp = await axios.post(url, values);
+            form.reset();
+            router.refresh();
             onClose();
         } catch (error) {
             console.error("[CREATE_CHANNEL]", error);
         }
-        finally{
+        finally {
             setLoading(false)
         }
     }
@@ -138,7 +149,7 @@ const CreateChannelModal = () => {
                         </div>
                         <DialogFooter className="px-6 py-4 w-full">
                             <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-                                {loading?"Creating":"Create"}
+                                {loading ? "Creating" : "Create"}
                             </Button>
                         </DialogFooter>
                     </form>

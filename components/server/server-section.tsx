@@ -18,6 +18,7 @@ interface ServerSectionProps {
 const ServerSection: FC<ServerSectionProps> = ({
   label,
   sectionType,
+  channelType,
   role,
   server,
 }) => {
@@ -32,34 +33,47 @@ const ServerSection: FC<ServerSectionProps> = ({
     return null;  // Prevents rendering during SSR
   }
   return (
-    <div className="flex items-center justify-between py-2 ml-auto">
-      <div className="flex items-center gap-x-1 cursor-pointer hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 px-2 rounded">
+    <div className="flex items-center justify-between py-2 ml-auto w-full">
+      {/* Dropdown Trigger */}
+      <div className="flex items-center gap-x-1 cursor-pointer hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 px-2 rounded w-full">
         <ChevronDown className="h-4 w-4 text-zinc-500 transition-transform" />
         <p className="text-xs uppercase font-semibold text-zinc-500 dark:text-zinc-400">
           {label}
         </p>
       </div>
-      {role !== MemberRole.GUEST && sectionType === 'channels' && (
-        <ActionTollTip label="Create Channel" side="top">
-          <button
-            className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
-            onClick={() => onOpen('createChannel', { server })}
-          >
-            <Plus className="h-3 w-3" />
-          </button>
-        </ActionTollTip>
-      )}
-      {role === MemberRole.ADMIN && sectionType === 'members' && (
-        <ActionTollTip label="Manage Members" side="top">
-          <button
-            className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
-            onClick={() => onOpen('manageMembers', { server })}
-          >
-            <Settings className="h-3 w-3 " />
-          </button>
-        </ActionTollTip>
-      )}
+
+      {/* Icons Section - Pushed to Right */}
+      <div className="flex items-center gap-x-2 ml-auto pr-2">
+        {role !== MemberRole.GUEST && sectionType === "channels" && (
+          <ActionTollTip label={`Create ${channelType?.toLowerCase()} channel`} side="top">
+            <button
+              className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent dropdown toggle
+                onOpen("createChannel", { channelType });
+              }}
+            >
+              <Plus className="h-3 w-3" />
+            </button>
+          </ActionTollTip>
+        )}
+
+        {role === MemberRole.ADMIN && sectionType === "members" && (
+          <ActionTollTip label="Manage Members" side="top">
+            <button
+              className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent dropdown toggle
+                onOpen("manageMembers", { server });
+              }}
+            >
+              <Settings className="h-3 w-3" />
+            </button>
+          </ActionTollTip>
+        )}
+      </div>
     </div>
+
   );
 };
 
