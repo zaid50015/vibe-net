@@ -3,7 +3,7 @@ import NavigationAction from "./navigation-action";
 import { redirect } from "next/navigation";
 import db from "@/lib/db";
 import { Separator } from "@/components/ui/separator"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { NavigationItems } from "@/components/navigation/navigation-item";
 import { ModeToggle } from "../ui/toggle-theme";
 import { UserButton } from "@clerk/nextjs";

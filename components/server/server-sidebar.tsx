@@ -115,7 +115,7 @@ export const ServerSideBar: FC<ServerSideBarProps> = async ({ serverId }) => {
                 {/* Text Channels Section */}
                 {!!textChannels?.length && (
                     <Collapsible defaultOpen={true} className="mb-2">
-                        <CollapsibleTrigger>
+                        <CollapsibleTrigger className="w-full">
                             <ServerSection
                                 sectionType="channels"
                                 channelType={ChannelType.TEXT}
@@ -141,7 +141,7 @@ export const ServerSideBar: FC<ServerSideBarProps> = async ({ serverId }) => {
                 {/* Audio Channels Section */}
                 {!!audioChannels?.length && (
                     <Collapsible defaultOpen={true} className="mb-2">
-                        <CollapsibleTrigger>
+                        <CollapsibleTrigger className="w-full">
                             <ServerSection
                                 sectionType="channels"
                                 channelType={ChannelType.AUDIO}
@@ -167,7 +167,7 @@ export const ServerSideBar: FC<ServerSideBarProps> = async ({ serverId }) => {
                 {/* Video Channels Section */}
                 {!!videoChannels?.length && (
                     <Collapsible defaultOpen={true} className="mb-2"> 
-                        <CollapsibleTrigger>
+                        <CollapsibleTrigger className="w-full">
                             <ServerSection
                                 sectionType="channels"
                                 channelType={ChannelType.VIDEO}
@@ -193,7 +193,7 @@ export const ServerSideBar: FC<ServerSideBarProps> = async ({ serverId }) => {
                 {/* Members Section */}
                 {!!members?.length && (
                     <Collapsible defaultOpen={true} className="mb-2">
-                        <CollapsibleTrigger>
+                        < CollapsibleTrigger className="w-full">
                             <ServerSection
                                 sectionType="members"
                                 role={role}

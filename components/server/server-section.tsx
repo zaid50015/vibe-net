@@ -1,6 +1,5 @@
 'use client';
 import { ChevronDown, Plus, Settings } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { ChannelType, MemberRole } from '@prisma/client';
 import { ServerWithMembersWithProfiles } from '@/app/type';
 import { FC, useEffect, useState } from 'react';
@@ -24,6 +23,7 @@ const ServerSection: FC<ServerSectionProps> = ({
 }) => {
   const { onOpen } = useModalStore();
   const [isClient, setIsClient] = useState(false);
+   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);  // Ensure this runs only on the client side
@@ -32,12 +32,22 @@ const ServerSection: FC<ServerSectionProps> = ({
   if (!isClient) {
     return null;  // Prevents rendering during SSR
   }
+  
+ 
+
   return (
-    <div className="flex items-center justify-between py-2 ml-auto w-full">
+    <div className="flex items-center justify-between py-2 ml-auto">
       {/* Dropdown Trigger */}
-      <div className="flex items-center gap-x-1 cursor-pointer hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 px-2 rounded w-full">
-        <ChevronDown className="h-4 w-4 text-zinc-500 transition-transform" />
-        <p className="text-xs uppercase font-semibold text-zinc-500 dark:text-zinc-400">
+      <div
+        className="flex items-center gap-x-1 cursor-pointer hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50  rounded"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <ChevronDown
+          className={`h-4 w-4 text-zinc-500 transition-transform duration-200 ${
+            isOpen ? "rotate-[-90deg]" : ""
+          }`}
+        />
+        <p className="text-x uppercase font-semibold text-zinc-500 dark:text-zinc-400">
           {label}
         </p>
       </div>
@@ -45,7 +55,7 @@ const ServerSection: FC<ServerSectionProps> = ({
       {/* Icons Section - Pushed to Right */}
       <div className="flex items-center gap-x-2 ml-auto pr-2">
         {role !== MemberRole.GUEST && sectionType === "channels" && (
-          <ActionTollTip label={`Create ${channelType?.toLowerCase()} channel`} side="top">
+          <ActionTollTip label="Create Channel" side="top">
             <button
               className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
               onClick={(e) => {
@@ -73,7 +83,6 @@ const ServerSection: FC<ServerSectionProps> = ({
         )}
       </div>
     </div>
-
   );
 };
 
