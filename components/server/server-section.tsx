@@ -55,7 +55,7 @@ const ServerSection: FC<ServerSectionProps> = ({
       {/* Icons Section - Pushed to Right */}
       <div className="flex items-center gap-x-2 ml-auto pr-2">
         {role !== MemberRole.GUEST && sectionType === "channels" && (
-          <ActionTollTip label="Create Channel" side="top">
+          <ActionTollTip label={ `Create ${channelType} channel`} side="top">
             <button
               className="text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
               onClick={(e) => {
@@ -63,7 +63,7 @@ const ServerSection: FC<ServerSectionProps> = ({
                 onOpen("createChannel", { channelType });
               }}
             >
-              <Plus className="h-3 w-3" />
+              <Plus className="h-4 w-4" />
             </button>
           </ActionTollTip>
         )}
@@ -77,7 +77,7 @@ const ServerSection: FC<ServerSectionProps> = ({
                 onOpen("manageMembers", { server });
               }}
             >
-              <Settings className="h-3 w-3" />
+              <Settings className="h-4 w-4" />
             </button>
           </ActionTollTip>
         )}

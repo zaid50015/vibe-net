@@ -24,7 +24,7 @@ const ServerChannel: FC<serverChannelProps> = ({ channel, server, role }) => {
   const params = useParams();
   const Icon = iconMap[channel.type];
   const [isClient, setIsClient] = useState(false);
-
+  const{onOpen}=useModalStore()
   useEffect(() => {
     setIsClient(true);  // Ensure this runs only on the client side
   }, []);
@@ -32,7 +32,7 @@ const ServerChannel: FC<serverChannelProps> = ({ channel, server, role }) => {
   if (!isClient) {
     return null;  // Prevents rendering during SSR
   }
- 
+
   return (
     <button
       className={cn(
@@ -45,7 +45,7 @@ const ServerChannel: FC<serverChannelProps> = ({ channel, server, role }) => {
         className={cn(
           'line-clamp-1 font-semibold text-sm text-zinc-500 group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-zinc-300 transition',
           params?.channelId === channel.id &&
-            'text-primary dark:text-zinc-200 dark:group-hover:text-white'
+          'text-primary dark:text-zinc-200 dark:group-hover:text-white'
         )}
       >
         {channel.name}
@@ -54,11 +54,13 @@ const ServerChannel: FC<serverChannelProps> = ({ channel, server, role }) => {
         <div className="ml-auto flex items-center gap-x-2">
           <ActionTollTip label="Edit" align='center' side='top'>
             <Edit
+            onClick={()=>onOpen("editChannel",{server,channel})}
               className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition"
             />
           </ActionTollTip>
           <ActionTollTip label="Delete">
             <Trash
+            onClick={()=>onOpen("deleteChannel",{server,channel})}
               className="hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition"
             />
           </ActionTollTip>
