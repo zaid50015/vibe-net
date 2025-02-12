@@ -37,7 +37,6 @@ const DeleteChannelModal = () => {
     }
 
     const leaveChannel = async () => {
-        // /api/channels/[channelId]?serverId=<serverId></serverId>
         try {
             setLoading(true);
             const url =qs.stringifyUrl({
@@ -49,8 +48,8 @@ const DeleteChannelModal = () => {
             console.log(url)
             await axios.delete(url);
             onClose();
-            router.refresh();
             router.push(`/servers/${server?.id}`);
+            router.refresh();
         } catch (error) {
             console.log("[DELETE_CHANNEL_MODAL]", error)
         }

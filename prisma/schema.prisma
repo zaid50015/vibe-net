@@ -69,7 +69,7 @@ model Channel {
   id        String      @id @default(auto()) @map("_id") @db.ObjectId // MongoDB default _id field
   type      ChannelType @default(TEXT)
   name      String
-  profileId String      @db.ObjectId // Stores the related Profile's ID
+  profileId String      @db.ObjectId // Stores the id of person who created the channel
   profile   Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
   serverId  String      @db.ObjectId // Stores the related Servers's ID
   Server    Server      @relation(fields: [serverId], references: [id], onDelete: Cascade)
