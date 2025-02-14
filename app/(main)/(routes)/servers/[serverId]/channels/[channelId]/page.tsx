@@ -3,6 +3,7 @@ import db from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import React, { FC} from 'react';
+import ChatHeader from '@/components/channel/chat-header';
 interface ChannelPageProps {
     params: {
         serverId: string;
@@ -31,9 +32,7 @@ const ChannelPage:FC<ChannelPageProps> = async({params}) => {
     }
     return (
         <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
-            <h1>Server ID: {serverId}</h1>
-            <h2>Channel ID: {channelId}</h2>
-            <p>Welcome to the channel page!</p>
+            <ChatHeader serverId={serverId} name={channel.name} type={'channel'}/>
         </div>
     );
 };

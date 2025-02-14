@@ -42,7 +42,7 @@ export const ServerSearchBar: FC<ServerSearchBarProps> = ({data}) => {
             return router.push(`/servers/${params?.serverId}/conversations/${id}`);
 
         if (type === 'Channels')
-            return router.push(`/servers/${params?.serverId}/channel/${id}`);
+            return router.push(`/servers/${params?.serverId}/channels/${id}`);
     };
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
