@@ -123,7 +123,7 @@ model Conversation {
   DirectMessage DirectMessage[]
 
   memberOneId String @db.ObjectId
-  member      Member @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
+  memberOne      Member @relation("MemberOne", fields: [memberOneId], references: [id], onDelete: Cascade)
 
   memberTwoId String @db.ObjectId
   memberTwo   Member @relation("MemberTwo", fields: [memberTwoId], references: [id], onDelete: Cascade)

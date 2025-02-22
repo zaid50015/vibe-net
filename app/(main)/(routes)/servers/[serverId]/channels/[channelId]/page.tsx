@@ -3,7 +3,7 @@ import db from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import React, { FC} from 'react';
-import ChatHeader from '@/components/channel/chat-header';
+import ChatHeader from '@/components/chat/chat-header';
 interface ChannelPageProps {
     params: {
         serverId: string;

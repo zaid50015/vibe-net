@@ -52,6 +52,7 @@ const CreateServerModal = () => {
         try {
             const resp = await axios.post('/api/servers', values);
             form.reset();
+            router.refresh();
             onClose();
         } catch (error) {
             console.log("[SERVER_MODAL]", +`Unknown error occured ${error}`)

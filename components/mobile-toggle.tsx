@@ -19,7 +19,6 @@ return(
           <NavigationSideBar />
         </div>
         <ServerSideBar serverId={serverId} />
-
       </SheetContent>
       </Sheet>
 )
