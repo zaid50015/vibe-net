@@ -6,6 +6,7 @@ import { type NextRequest } from 'next/server'
 export async function PATCH(req: NextRequest,
     { params }: { params: Promise<{ memberId: string }> }
 ) {
+    console.log(NextResponse);
     try {
         const searchParams = req.nextUrl.searchParams
         const serverId = searchParams.get('serverId')

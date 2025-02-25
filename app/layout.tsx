@@ -18,6 +18,7 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { ModalProvider } from "@/components/providers/modal-provider";
+import { SocketProvider } from "@/components/providers/socket-provider";
 const font = Open_Sans({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -29,16 +30,16 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={cn(`${font.className} bg-white dark:bg-[#313338] antialiased`)}>
-        <NextSSRPlugin
-          /**
-           * The `extractRouterConfig` will extract **only** the route configs
-           * from the router to prevent additional information from being
-           * leaked to the client. The data passed to the client is the same
-           * as if you were to fetch `/api/uploadthing` directly.
-           */
-          routerConfig={extractRouterConfig(ourFileRouter)}
-        />
-         <ThemeProvider 
+          <NextSSRPlugin
+            /**
+             * The `extractRouterConfig` will extract **only** the route configs
+             * from the router to prevent additional information from being
+             * leaked to the client. The data passed to the client is the same
+             * as if you were to fetch `/api/uploadthing` directly.
+             */
+            routerConfig={extractRouterConfig(ourFileRouter)}
+          />
+          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
@@ -47,8 +48,11 @@ export default function RootLayout({
           >
             <SignedOut></SignedOut>
             <SignedIn></SignedIn>
-            <ModalProvider/>
-            {children}
+            <SocketProvider>
+            <ModalProvider />
+              {children}
+            </SocketProvider>
+
             <Toaster />
           </ThemeProvider>
         </body>
