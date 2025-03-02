@@ -1,6 +1,7 @@
 
 
 import ChatHeader from '@/components/chat/chat-header';
+import ChatInput from '@/components/chat/chat-input';
 import { getOrCreateConversation } from '@/lib/conversation';
 import currentProfile from '@/lib/current-profile';
 import db from '@/lib/db';
@@ -21,7 +22,8 @@ const ConversationPage: FC<MemberIdPageProps> = async({ params }) => {
     if(!profile){
         return redirectToSignIn();
     }
-
+ 
+    //Here we are checking if the current user is a member of the server and each new server will have new one on one conversation with users
     const currentMember=await db.member.findFirst({
         where:{
             serverId,
@@ -58,6 +60,10 @@ const conversation = await getOrCreateConversation(
           serverId={params.serverId}
           type="conversation"
         />
+
+        <div className="flex-1">Messages</div>
+
+        <ChatInput name={otherMember.profile.name} type={'conversation'} apiUrl={`/api/socket/direct-messages`}  query={{ conversationId: conversation.id }}/>
         </div>
     );
 };
