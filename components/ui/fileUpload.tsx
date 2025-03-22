@@ -1,7 +1,7 @@
 "use client";
 import { imageRemove } from "@/lib/deleteUploadthing";
 import { UploadDropzone } from "@/lib/uploadthing";
-import { X } from "lucide-react";
+import { FilesIcon, X } from "lucide-react";
 import Image from "next/image";
 import { FC, useState } from "react";
 
@@ -40,7 +40,7 @@ const FileUpload: FC<fileUploadProps> = ({ onChange, endpoint, value }) => {
     }
   };
 
-  if (value && fileInfo?.fileType !== "pdf") {
+  if (value && fileInfo?.fileType !== "application/pdf") {
     return (
       <div className="relative h-20 w-20">
         <Image fill src={value} alt="Upload" className="rounded-full" />
@@ -54,6 +54,32 @@ const FileUpload: FC<fileUploadProps> = ({ onChange, endpoint, value }) => {
       </div>
     );
   }
+
+  if (value) {
+    console.log("Value",value);
+    return (
+      <div className="relative flex items-center p-2 mt-2 rounded-mg bg-background/10 w-full">
+        <FilesIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
+        <a
+          href={value}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline overflow-hidden"
+        >
+         <p className="w-20">{value}</p>
+        </a>
+     
+        <button
+           onClick={() => handleDelete()}
+          className="bg-rose-500 text-white p-1 rounded-full absolute shadow-sm -top-2 -right-2"
+          type="button"
+        >
+          <X className="h-4 w-4"></X>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <>
       <UploadDropzone

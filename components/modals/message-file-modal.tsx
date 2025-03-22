@@ -62,7 +62,7 @@ const MessageFileModal = () => {
     return (
         <>
             <Dialog open={isModalOpen} onOpenChange={onClick}>
-                <DialogContent className="bg-white text text-black overflow-hidden">
+                <DialogContent className="bg-white text text-black w-full max-w-md">
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-bold text-center">
                             Message Attachment
