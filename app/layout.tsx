@@ -19,6 +19,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { SocketProvider } from "@/components/providers/socket-provider";
+import { QueryProvider } from "@/components/providers/query-provider";
 const font = Open_Sans({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -49,8 +50,10 @@ export default function RootLayout({
             <SignedOut></SignedOut>
             <SignedIn></SignedIn>
             <SocketProvider>
-            <ModalProvider />
-              {children}
+              <ModalProvider />
+              <QueryProvider>
+                {children}
+              </QueryProvider>
             </SocketProvider>
 
             <Toaster />

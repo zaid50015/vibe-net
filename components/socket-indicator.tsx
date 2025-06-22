@@ -1,6 +1,5 @@
 'use client';
 
-import { connected } from 'process';
 import { useSocket } from './providers/socket-provider';
 import { Badge } from './ui/badge';
 

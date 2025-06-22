@@ -36,6 +36,7 @@ import { useRouter } from 'next/navigation';
 import { useModalStore } from '@/hooks/use-modal-store';
 import { ServerWithMembersWithProfiles } from '@/app/type';
 import UserAvatar from '../user-avatar';
+import { ActionTollTip } from '../ui/action-tool-tip';
 
 interface MembersModalProps {}
 
@@ -108,15 +109,18 @@ const MembersModal: FC<MembersModalProps> = ({}) => {
           {server?.members?.map((member) => (
             <div key={member.id} className="flex items-center gap-x-2 mb-6">
               <UserAvatar src={member.profile.imageUrl} />
+              <ActionTollTip label={member.role}>
               <div className="flex flex-col gap-y-1">
                 <div className="text-xs font-semibold flex items-center gap-x-1">
                   {member.profile.name}
                   {roleIconMap[member.role]}
+                  
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   {member.profile.email}
                 </p>
               </div>
+              </ActionTollTip>
               {server.profileId !== member.profileId &&
                 loadingId !== member.id && (
                   <div className="ml-auto">
