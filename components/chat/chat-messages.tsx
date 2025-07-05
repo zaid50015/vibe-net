@@ -1,10 +1,21 @@
-'use client';
-import { Member } from "@prisma/client";
-import { FC } from "react";
+"use client";
+import { Member, Message, Profile } from "@prisma/client";
+import { FC, Fragment } from "react";
 import { ChatWelcomeMessage } from "./chat-welcome";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";
+import { format } from "date-fns";
+import ChatItem from "./chat-item";
 
+// member={member}
+//name={channel.name}
+//chatId={channel.id}
+//type="channel"
+// apiUrl="/api/messages"
+// socketUrl="/api/socket/messages"
+// socketQuery={{ channelId: channel.id, serverId: channel.serverId }
+// paramKey="channelId"
+// paramValue={channel.id}
 interface ChatMessagesProps {
   name: string;
   member: Member;
@@ -12,11 +23,18 @@ interface ChatMessagesProps {
   apiUrl: string;
   socketUrl: string;
   socketQuery: Record<string, string>;
-  paramKey: 'channelId' | 'conversationId';
+  paramKey: "channelId" | "conversationId";
   paramValue: string;
-  type: 'channel' | 'conversation';
+  type: "channel" | "conversation";
 }
 
+type MessageWithMemberWithProfile = Message & {
+  member: Member & {
+    profile: Profile;
+  };
+};
+
+const DATE_FORMAT = "d MMM yyyy, HH:mm";
 const ChatMessages: FC<ChatMessagesProps> = ({
   apiUrl,
   chatId,
@@ -28,15 +46,16 @@ const ChatMessages: FC<ChatMessagesProps> = ({
   socketUrl,
   type,
 }) => {
-  const queryKey = `chat:${chatId}`
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useChatQuery({
-    apiUrl,
-    paramKey,
-    paramValue,
-    queryKey,
-  });
-
-  if (status === 'pending') {
+  const queryKey = `chat:${chatId}`;
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
+    useChatQuery({
+      apiUrl,
+      paramKey,
+      paramValue,
+      queryKey,
+    });
+  console.log("CHAT_MESSAGES_COMPONENT \n", data);
+  if (status === "pending") {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
         <Loader2 className="h-7 w-7 text-zinc-500 animate-spin my-4" />
@@ -47,7 +66,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
     );
   }
 
-  if (status === 'error') {
+  if (status === "error") {
     return (
       <div className="flex flex-col flex-1 justify-center items-center">
         <ServerCrash className="h-7 w-7 text-zinc-500 my-4" />
@@ -57,19 +76,34 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       </div>
     );
   }
-  console.log("CHAT_MESSAGE_COMPONENT \n",data);
+  console.log("CHAT_MESSAGE_COMPONENT \n", data);
   return (
-
     <div className="flex flex-col h-full overflow-y-auto">
       <div className="flex-1" />
-      <ChatWelcomeMessage
-        name={name}
-        type={type} />
-
+      <ChatWelcomeMessage name={name} type={type} />
+      <div className="flex flex-col-reverse mt-auto">
+        {data?.pages?.map((group, i) => (
+          <Fragment key={i}>
+            {group?.messages?.map((message: MessageWithMemberWithProfile) => (
+              <ChatItem
+                key={message.id}
+                id={message.id}
+                currentMember={member}
+                content={message.content}
+                member={message.member}
+                fileUrl={message.fileUrl}
+                deleted={message.deleted}
+                timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+                isUpdate={message.updatedAt !== message.createdAt}
+                socketUrl={socketUrl}
+                socketQuery={socketQuery}
+              />
+            ))}
+          </Fragment>
+        ))}
+      </div>
     </div>
-  )
-
-
-}
+  );
+};
 
 export default ChatMessages;
