@@ -1,4 +1,5 @@
 'use client';
+
 import { Member, MemberRole, Profile } from '@prisma/client';
 import { FC, useEffect, useState } from 'react';
 import UserAvatar from '../user-avatar';
@@ -35,6 +36,7 @@ const roleIconMap = {
   MODERATOR: <ShieldCheck className="h-4 w-4 ml-2 text-indigo-500" />,
   ADMIN: <ShieldAlert className="h-4 w-4 ml-2 text-indigo-500" />,
 };
+
 const formSchema = z.object({ content: z.string().min(1) });
 
 const ChatItem: FC<ChatItemProps> = ({
@@ -54,6 +56,35 @@ const ChatItem: FC<ChatItemProps> = ({
   const params = useParams();
   const router = useRouter();
 
+  // 🈯 Translation state
+  const [translatedContent, setTranslatedContent] = useState<string | null>(null);
+  const [selectedLang, setSelectedLang] = useState('hi'); // default to Hindi
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  const handleTranslate = async () => {
+    try {
+      setIsTranslating(true);
+      const res = await fetch('https://libretranslate.de/translate', {
+        method: 'POST',
+        body: JSON.stringify({
+          q: content,
+          source: 'en',
+          target: selectedLang,
+          format: 'text',
+        }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const data = await res.json();
+      console.log("Translated_data",data)
+      setTranslatedContent(data.translatedText);
+    } catch (error) {
+      console.error('Translation error:', error);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
   const onMemberClick = () => {
     if (member.id === currentMember.id) return;
     router.push(`/servers/${params?.serverId}/conversation/${member.id}`);
@@ -66,7 +97,6 @@ const ChatItem: FC<ChatItemProps> = ({
       }
     };
     window.addEventListener('keydown', handleKeyDown);
-
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
@@ -123,7 +153,7 @@ const ChatItem: FC<ChatItemProps> = ({
         <div className="flex flex-col w-full">
           <div className="flex items-center gap-x-2">
             <div className="flex items-center">
-              <p className="font-semibold text-sm hover:underline cursor-poiter">
+              <p className="font-semibold text-sm hover:underline cursor-pointer">
                 {member.profile.name}
               </p>
               <ActionTollTip label={member.role}>
@@ -152,7 +182,7 @@ const ChatItem: FC<ChatItemProps> = ({
           )}
 
           {isPDF && (
-            <div className="relative flex items-center p-2 mt-2 rounded-mg bg-background/10">
+            <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
               <FileIcon className="h-10 w-10 fill-indigo-200 stroke-indigo-400" />
               <a
                 href={fileUrl}
@@ -164,26 +194,67 @@ const ChatItem: FC<ChatItemProps> = ({
               </a>
             </div>
           )}
+
+          {/* Text Message */}
           {!fileUrl && !isEditing && (
-            <p
-              className={cn(
-                'text-sm text-zinc-600 dark:text-zinc-300',
-                deleted &&
-                  'italic text-zinc-500 dark:text-zinc-400 text-xs mt-1'
+            <div className="flex flex-col gap-1">
+              <p
+                className={cn(
+                  'text-sm text-zinc-600 dark:text-zinc-300',
+                  deleted &&
+                    'italic text-zinc-500 dark:text-zinc-400 text-xs mt-1'
+                )}
+              >
+                {translatedContent || content}
+                {isUpdate && !deleted && (
+                  <span className="text-[10px] mx-2 text-zinc-500 dark:text-zinc-00">
+                    (edited)
+                  </span>
+                )}
+              </p>
+
+              {!deleted && (
+                <div className="flex items-center gap-2 text-xs text-zinc-400">
+                  <select
+                    value={selectedLang}
+                    onChange={(e) => setSelectedLang(e.target.value)}
+                    className="text-xs bg-black border rounded px-1 py-0.5 dark:text-white "
+                  >
+                    <option value="hi">Hindi</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="ja">Japanese</option>
+                  </select>
+
+                  {!translatedContent && (
+                    <button
+                      onClick={handleTranslate}
+                      disabled={isTranslating}
+                      className="hover:underline text-blue-500"
+                    >
+                      {isTranslating ? 'Translating...' : 'Translate'}
+                    </button>
+                  )}
+
+                  {translatedContent && (
+                    <button
+                      onClick={() => setTranslatedContent(null)}
+                      className="text-red-400 hover:underline"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
               )}
-            >
-              {content}
-              {isUpdate && !deleted && (
-                <span className="text-[10px] mx-2 text-zinc-500 dark:text-zinc-400">
-                  (edited)
-                </span>
-              )}
-            </p>
+            </div>
           )}
+
+          {/* Editing Form */}
           {!fileUrl && isEditing && (
             <Form {...form}>
               <form
-                className="flex items-center w-full gap-x-2 pt-2 "
+                className="flex items-center w-full gap-x-2 pt-2"
                 onSubmit={form.handleSubmit(onSubmit)}
               >
                 <FormField
@@ -195,7 +266,7 @@ const ChatItem: FC<ChatItemProps> = ({
                         <div className="relative w-full">
                           <Input
                             disabled={isLoading}
-                            className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text0zinc-600 dark:text-zinc-200"
+                            className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
                             placeholder="Edited message"
                             {...field}
                           />
@@ -215,6 +286,8 @@ const ChatItem: FC<ChatItemProps> = ({
           )}
         </div>
       </div>
+
+      {/* Action buttons (Edit/Delete) */}
       {canDeleteMessage && (
         <div className="hidden group-hover:flex items-center gap-x-2 absolute p-1 -top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
           {canEditMessage && (
