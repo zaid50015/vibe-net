@@ -58,7 +58,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
       paramValue,
       queryKey,
     });
-  // useChatSocket({ queryKey, addKey, updateKey });
+
   console.log("CHAT_MESSAGES_COMPONENT \n", data);
   if (status === "pending") {
     return (
