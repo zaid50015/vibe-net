@@ -67,7 +67,7 @@ export const useChatQuery = ({
       queryFn: fetchMessages,
       getNextPageParam: (lastPage) => lastPage?.nextCursor,
       // Refetch every second if the socket is not connected.
-      refetchInterval: isConnected ? false : 1000,
+      refetchInterval: 1000,
       // It's good practice to set an initial page parameter.
       initialPageParam: undefined,
     });
