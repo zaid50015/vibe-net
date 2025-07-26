@@ -50,7 +50,7 @@ export const NavigationItems: FC<NavigationItemsProps> = ({
                 >
                     <Image 
                         fill 
-                        src={imageUrl} 
+                        src={imageUrl || ""} 
                         alt={`${name} server`}
                         sizes="48px"
                         priority={params?.serverId === id}

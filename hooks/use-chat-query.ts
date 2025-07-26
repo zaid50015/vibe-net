@@ -49,8 +49,8 @@ export const useChatQuery = ({
         // Return the data in the format expected by `useInfiniteQuery`.
         console.log("Response_message",response)
         return {
-            messages: response.data.messages,
-            nextCursor: response.data.nextCursor,
+          items:response.data?.items,
+            nextCursor: response.data?.nextCursor,
         };
         
     } catch (error) {
