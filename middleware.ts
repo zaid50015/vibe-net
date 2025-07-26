@@ -7,6 +7,7 @@ const isPublicRoute = createRouteMatcher([
 ]);
 //we are not storing the user id in some headers due to security issues
 export default clerkMiddleware(async (auth, request) => {
+  console.log("Middleware is running",request.nextUrl.pathname)
   if (!isPublicRoute(request)) {
     //redirects to sign in
     await auth.protect();

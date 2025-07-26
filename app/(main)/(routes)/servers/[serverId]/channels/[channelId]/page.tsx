@@ -12,7 +12,8 @@ interface ChannelPageProps {
         channelId: string;
     }
 }
-const ChannelPage: FC<ChannelPageProps> = async ({ params }) => {
+const ChannelPage: FC<ChannelPageProps> = async props => {
+    const params = await props.params;
     const { serverId, channelId } = params;
     const profile = await currentProfile();
     const { redirectToSignIn } = await auth();

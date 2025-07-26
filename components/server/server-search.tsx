@@ -21,7 +21,7 @@ interface ServerSearchBarProps {
         data: {
             id: string,
             name: string,
-            icon: ReactNode,
+            icon: ReactNode | any,
         }[] | undefined
     }[]
 }

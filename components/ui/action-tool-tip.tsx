@@ -12,20 +12,22 @@ interface ActionTollTipProps {
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";
 }
+
 export const ActionTollTip: FC<ActionTollTipProps> = ({
   label,
   children,
-  side = "right", // Default to "right"
-  align = "center", // Default to "center"
+  side = "right",
+  align = "center",
 }) => {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={50}>
-        <TooltipTrigger>{children}</TooltipTrigger>
+        {/* Wrap in span to ensure valid DOM node for trigger */}
+        <TooltipTrigger asChild>
+          <span className="cursor-pointer">{children}</span>
+        </TooltipTrigger>
         <TooltipContent side={side} align={align}>
-          <p className="font-semibold text-sm capitalize">
-            {label}
-          </p>
+          <p className="font-semibold text-sm capitalize">{label}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

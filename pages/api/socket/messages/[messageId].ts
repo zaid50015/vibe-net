@@ -127,6 +127,9 @@ export default async function handler(
     }
 
     const updateKey = `chat:${channelId}:messages:update`;
+    if (res?.socket?.server?.io) {
+      console.log("socket is connect on backend");
+    }
     res?.socket?.server?.io?.emit(updateKey, message);
     return res.status(200).json(message);
   } catch (error) {

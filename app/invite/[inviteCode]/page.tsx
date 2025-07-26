@@ -3,11 +3,12 @@ import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-export default async function InviteToServer({
-    params,
-}: {
-    params: { inviteCode: string };
-}) {
+export default async function InviteToServer(
+    props: {
+        params: Promise<{ inviteCode: string }>;
+    }
+) {
+    const params = await props.params;
     const profile = await currentProfile();
     const { redirectToSignIn } = await auth();
     if (!profile) {
